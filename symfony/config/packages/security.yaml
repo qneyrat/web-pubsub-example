@@ -1,0 +1,32 @@
+security:
+    encoders:
+        App\Document\User: bcrypt
+    providers:
+        user_provider:
+            mongodb: {class: App\Document\User, property: username}
+    firewalls:
+        login:
+            pattern:  ^/login
+            stateless: true
+            anonymous: true
+            provider: user_provider
+            form_login:
+                check_path: /login_check
+                username_parameter: username
+                password_parameter: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                require_previous_session: false
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            provider: user_provider
+            stateless: true
+            anonymous: true
+            lexik_jwt: ~
+
+    access_control:
+        - { path: ^/login_check, role: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+        - { path: ^/, roles: [ IS_AUTHENTICATED_FULLY ] }

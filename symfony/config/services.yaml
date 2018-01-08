@@ -1,0 +1,24 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Migrations,Tests}'
+
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    Doctrine\ODM\MongoDB\DocumentManager: '@doctrine.odm.mongodb.document_manager'
+
+    Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter:
+        class: Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter
+        arguments:
+            - "@doctrine_mongodb"
+        tags:
+            - { name: request.param_converter, converter: "doctrine.odm" }

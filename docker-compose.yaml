@@ -1,0 +1,42 @@
+version: "2"
+services:
+    db:
+        image: mongo:latest
+        environment:
+          - MONGO_DATA_DIR=/data/db
+        volumes:
+          - ./data/db:/data/db:cached
+        ports:
+          - 27017:27017
+    php:
+        build: ./php-fpm
+        ports:
+            - 9000:9000
+        volumes:
+            - ./symfony:/var/www/symfony:cached
+            - ./logs/symfony:/var/www/symfony/var/logs:cached
+        links:
+            - db
+            - rabbitmq
+    nginx:
+        build: ./nginx
+        ports:
+            - 80:80
+        links:
+            - php
+        volumes_from:
+            - php
+        volumes:
+            - ./logs/nginx/:/var/log/nginx:cached
+    rabbitmq:
+        image: rabbitmq:3-management
+        environment:
+            RABBITMQ_ERLANG_COOKIE: "SECRET"
+            RABBITMQ_DEFAULT_USER: "admin"
+            RABBITMQ_DEFAULT_PASS: "rabbitmq"
+            RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+            - 15672:15672
+            - 5672:5672
+        volumes:
+            - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:cached
