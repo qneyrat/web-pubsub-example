@@ -15,7 +15,7 @@ type Server struct {
 }
 
 type Broker interface {
-	Handle(c channel.Channel)
+	Handle(c *channel.Channel)
 }
 
 func NewServer(b Broker) *Server {

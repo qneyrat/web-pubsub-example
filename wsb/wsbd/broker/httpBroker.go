@@ -10,7 +10,7 @@ import (
 
 type HttpBroker struct {}
 
-func (b* HttpBroker) Handle(c channel.Channel) {
+func (b* HttpBroker) Handle(c *channel.Channel) {
 	http.HandleFunc("/actions", func(w http.ResponseWriter, r *http.Request) {
 		str := `{"message": "1"}`
 		log.Printf("new message  %v", str)
