@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	wbd := server.NewServer(&broker.AmqpBroker{})
+	wbd := server.NewServer(&broker.HttpBroker{})
 	err := wbd.Start()
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
