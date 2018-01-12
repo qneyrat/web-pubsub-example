@@ -19,13 +19,18 @@ services:
             - db
             - rabbitmq
     wsb:
-        image: golang:alpine
+        build: ./wsb
         volumes:
-          - ./wsb:/go/src/wsb:cached
+          - ./wsb:/go/src/github.com/qneyrat/wsb:cached
+        ports:
+          - 4000:4000
+          - 8007:8007
+        links:
+          - rabbitmq
     nginx:
         build: ./nginx
         ports:
-            - 80:80
+            - 8001:80
         links:
             - php
         volumes_from:
