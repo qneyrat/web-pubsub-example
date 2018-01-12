@@ -18,6 +18,10 @@ services:
         links:
             - db
             - rabbitmq
+    wsb:
+        image: golang:alpine
+        volumes:
+          - ./wsb:/go/src/wsb:cached
     nginx:
         build: ./nginx
         ports:

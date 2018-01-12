@@ -1,0 +1,15 @@
+swarrot:
+    provider: "amqp_lib"
+    connections:
+        default:
+            host: "%env(RABBITMQ_HOST)%"
+            port: 5672
+            login: "%env(RABBITMQ_LOGIN)%"
+            password: "%env(RABBITMQ_PASSWORD)%"
+            vhost: "/"
+
+    messages_types:
+        message:
+            connection: "default"
+            exchange: "default"
+            routing_key: "api.conversation"

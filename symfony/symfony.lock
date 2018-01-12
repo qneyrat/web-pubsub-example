@@ -71,6 +71,12 @@
     "namshi/jose": {
         "version": "7.2.3"
     },
+    "odolbeau/rabbit-mq-admin-toolkit": {
+        "version": "v4.0.2"
+    },
+    "php-amqplib/php-amqplib": {
+        "version": "v2.7.0"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -82,6 +88,12 @@
     },
     "psr/simple-cache": {
         "version": "1.0.0"
+    },
+    "swarrot/swarrot": {
+        "version": "v3.2.1"
+    },
+    "swarrot/swarrot-bundle": {
+        "version": "v1.5.1"
     },
     "symfony/cache": {
         "version": "v4.0.3"
