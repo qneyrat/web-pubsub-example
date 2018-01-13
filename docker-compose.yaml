@@ -18,19 +18,10 @@ services:
         links:
             - db
             - rabbitmq
-    wsb:
-        build: ./wsb
-        volumes:
-          - ./wsb:/go/src/github.com/qneyrat/wsb:cached
-        ports:
-          - 4000:4000
-          - 8007:8007
-        links:
-          - rabbitmq
     nginx:
         build: ./nginx
         ports:
-            - 8001:80
+            - 80:80
         links:
             - php
         volumes_from:
@@ -48,4 +39,14 @@ services:
             - 15672:15672
             - 5672:5672
         volumes:
-            - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:cached
+            - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:cached  
+    wsb:
+        build: ./wsb
+        environment:
+            WAIT_HOSTS: rabbitmq:5672
+        volumes:
+          - ./wsb:/go/src/github.com/qneyrat/wsb:cached
+        ports:
+          - 4000:4000
+        links:
+          - rabbitmq

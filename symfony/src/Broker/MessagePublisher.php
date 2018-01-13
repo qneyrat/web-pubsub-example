@@ -34,14 +34,17 @@ class MessagePublisher
 
     public function messageAdded(Conversation $conversation, Message $message)
     {
-        $message->setTo($conversation->getId());
+        foreach($conversation->getUsers() as $user) {
+            if($message->getFrom() !== $user) {
+                $message->setTo($user);
 
-        $payload = $this->serializer->serialize($message, 'json', ['conversation']);
-        $brokerMessage = new BrokerMessage(
-            $payload,
-            ['routing_key' => sprintf('api.conversation.%s.message.added', $conversation->getId())]
-        );
-
-        $this->publisher->publish('message', $brokerMessage);
+                $payload = $this->serializer->serialize($message, 'json', ['conversation']);
+                $this->publisher->publish(
+                    'message',
+                    new BrokerMessage($payload),
+                    ['routing_key' => sprintf('api.conversation.%s.message.added', $conversation->getId())]
+                );
+            }
+        }
     }
 }

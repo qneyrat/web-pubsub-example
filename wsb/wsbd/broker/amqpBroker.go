@@ -2,14 +2,16 @@ package broker
 
 import (
 	"log"
+
 	"github.com/streadway/amqp"
-	
+
 	"github.com/qneyrat/wsb/wsbd/channel"
+	"github.com/qneyrat/wsb/wsbd/message"
 )
 
-type AmqpBroker struct {}
+type AmqpBroker struct{}
 
-func (b* AmqpBroker) Handle(c *channel.Channel) {
+func (b *AmqpBroker) Handle(c *channel.Channel) {
 	conn, err := amqp.Dial("amqp://admin:rabbitmq@rabbitmq:5672/")
 	if err != nil {
 		log.Fatalf("%s", err)
@@ -23,12 +25,12 @@ func (b* AmqpBroker) Handle(c *channel.Channel) {
 	defer ch.Close()
 
 	q, err := ch.QueueDeclare(
-		"messages", // name
-		false, // durable
-		false, // delete when unused
-		true,  // exclusive
-		false, // no-wait
-		nil,   // arguments
+		"messages", // name of the queue
+		true,       // durable
+		false,      // delete when unused
+		false,      // exclusive
+		false,      // noWait
+		nil,        // arguments
 	)
 	if err != nil {
 		log.Fatalf("%s", err)
@@ -37,7 +39,7 @@ func (b* AmqpBroker) Handle(c *channel.Channel) {
 	err = ch.QueueBind(
 		q.Name, // queue name
 		"api.conversation.*.message.added", // routing key
-		"default", // exchange
+		"default",                          // exchange
 		false,
 		nil)
 	if err != nil {
@@ -62,6 +64,12 @@ func (b* AmqpBroker) Handle(c *channel.Channel) {
 	go func() {
 		for d := range msgs {
 			log.Printf(" [x] %s", d.Body)
+			message := message.Message{
+				From: "all",
+				Body: d.Body,
+			}
+
+			c.Chan <- message
 		}
 	}()
 

@@ -39,11 +39,11 @@ class UserController extends Controller
      */
     public function meAction()
     {
-        $userId = '5a54017b5bb3eb011019f391';
+        $userId = '5a5a13ea9e3773014d6c9f21';
 
         $conversation = $this->documentManager
             ->getRepository(Conversation::class)
-            ->find('5a57c2c85bb3eb002b1f70d1')
+            ->find('5a5a15fa9e37730163218481')
         ;
 
         $message = new Message();

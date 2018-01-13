@@ -34,7 +34,7 @@ class CreateConversationCommand  extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $userId = '5a54017b5bb3eb011019f391';
+        $userId = '5a5a13ea9e3773014d6c9f21';
         $conversation = new Conversation();
         $conversation->setUsers([$userId]);
 
