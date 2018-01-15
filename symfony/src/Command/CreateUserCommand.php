@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Document\User;
-use Doctrine\ODM\MongoDB\DocumentManager;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,9 +13,9 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class CreateUserCommand  extends Command
 {
     /**
-     * @var DocumentManager
+     * @var EntityManagerInterface
      */
-    private $documentManager;
+    private $entityManager;
 
     /**
      * @var UserPasswordEncoderInterface
@@ -24,13 +24,13 @@ class CreateUserCommand  extends Command
 
     /**
      * CreateUserCommand constructor.
-     * @param DocumentManager $documentManager
+     * @param EntityManagerInterface $entityManager
      * @param UserPasswordEncoderInterface $encoder
      */
-    public function __construct(DocumentManager $documentManager, UserPasswordEncoderInterface $encoder)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder)
     {
         parent::__construct();
-        $this->documentManager = $documentManager;
+        $this->entityManager = $entityManager;
         $this->encoder = $encoder;
     }
 
@@ -49,7 +49,7 @@ class CreateUserCommand  extends Command
 
         $user->setPassword($encoded);
 
-        $this->documentManager->persist($user);
-        $this->documentManager->flush();
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 }

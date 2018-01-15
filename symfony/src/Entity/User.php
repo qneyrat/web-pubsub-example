@@ -1,33 +1,44 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Document;
+namespace App\Entity;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @MongoDB\Document
+ * @ORM\Entity
  */
 class User implements UserInterface
 {
     /**
-     * @MongoDB\Id
-     * @Groups({"user"})
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @MongoDB\Field(type="string")
-     * @Groups({"user"})
+     * @ORM\Column(type="string")
      */
     private $username;
 
     /**
-     * @MongoDB\Field(type="string")
+     * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Conversation", inversedBy="users")
+     * @ORM\JoinTable(name="users_conversations")
+     */
+    private $conversations;
+
+    public function __construct()
+    {
+        $this->conversations = new ArrayCollection();
+    }
 
     /**
      * {@inheritdoc}

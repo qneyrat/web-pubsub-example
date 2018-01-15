@@ -3,7 +3,7 @@ security:
         App\Document\User: bcrypt
     providers:
         user_provider:
-            mongodb: {class: App\Document\User, property: username}
+            entity: {class: App\Document\User, property: username}
     firewalls:
         login:
             pattern:  ^/login

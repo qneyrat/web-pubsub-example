@@ -1,37 +1,41 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Document;
+namespace App\Entity;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-use Doctrine\ODM\MongoDB\PersistentCollection;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @MongoDB\Document
+ * @ORM\Entity
  */
 class Conversation
 {
     /**
-     * @MongoDB\Id
-     * @Groups("conversation")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @MongoDB\Field(type="collection")
-     * @Groups("conversation")
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="conversations")
      */
     private $users;
 
     /**
-     * @MongoDB\EmbedMany(targetDocument="Message")
-     * @Groups("conversation")
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="conversation")
      */
     private $messages;
 
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+    }
+
     /**
-     * @return mixed|PersistentCollection
+     * @return mixed
      */
     public function getMessages()
     {

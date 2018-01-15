@@ -24,24 +24,13 @@ RUN apk add --update \
     php7-session \
     php7-simplexml \
     php7-bcmath \
-    curl-dev \
-    openssl-dev \
-    autoconf \
-    dpkg-dev dpkg \
-    file \
-    g++ \
-    gcc \
-    libc-dev \
-    pkgconf \
-    re2c \
+    php7-pdo \
+    php7-pgsql \
+    php7-pdo_pgsql \
     make \
     curl
 
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/*
-
-RUN pecl install mongodb-1.3.4
-RUN echo "extension=mongodb.so" >> /etc/php7/php-fpm.d/mongodb.ini
-RUN echo "extension=mongodb.so" >> /etc/php7/conf.d/mongodb.ini
 
 RUN curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 

@@ -12,7 +12,7 @@ import (
 type AmqpBroker struct{}
 
 func (b *AmqpBroker) Handle(c *channel.Channel) {
-	conn, err := amqp.Dial("amqp://admin:rabbitmq@rabbitmq:5672/")
+	conn, err := amqp.Dial("amqp://admin:admin@rabbitmq:5672/")
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
@@ -39,7 +39,7 @@ func (b *AmqpBroker) Handle(c *channel.Channel) {
 	err = ch.QueueBind(
 		q.Name, // queue name
 		"api.conversation.*.message.added", // routing key
-		"default",                          // exchange
+		"api", // exchange
 		false,
 		nil)
 	if err != nil {

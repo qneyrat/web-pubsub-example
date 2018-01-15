@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Broker;
 
-use App\Document\Conversation;
-use App\Document\Message;
+use App\Entity\Conversation;
+use App\Entity\Message;
 use Swarrot\SwarrotBundle\Broker\Publisher;
 use Swarrot\Broker\Message as BrokerMessage;
 use Symfony\Component\Serializer\SerializerInterface;

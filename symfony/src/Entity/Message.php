@@ -1,42 +1,57 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Document;
+namespace App\Entity;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @MongoDB\EmbeddedDocument
+ * @ORM\Entity
  */
 class Message
 {
     /**
-     * @MongoDB\Field(type="string")
-     * @Groups({"conversation"})
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $from;
 
     /**
-     * @MongoDB\Field(type="string")
-     * @Groups({"conversation"})
+     * @ORM\Column(type="string")
      */
     private $body;
 
     /**
-     * @MongoDB\Field(type="date")
-     * @Groups({"conversation"})
+     * @ORM\Column(type="date")
      */
     private $createdAt;
 
     /**
-     * @Groups({"conversation"})
+     * @ORM\ManyToOne(targetEntity="Conversation", inversedBy="messages")
+     * @ORM\JoinColumn(name="conversation_id", referencedColumnName="id")
      */
+    private $conversation;
+
     private $to;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -93,5 +108,21 @@ class Message
     public function setTo($to): void
     {
         $this->to = $to;
+    }
+
+    /**
+     * @return Conversation
+     */
+    public function getConversation()
+    {
+        return $this->conversation;
+    }
+
+    /**
+     * @param mixed $conversation
+     */
+    public function setConversation($conversation)
+    {
+        $this->conversation = $conversation;
     }
 }

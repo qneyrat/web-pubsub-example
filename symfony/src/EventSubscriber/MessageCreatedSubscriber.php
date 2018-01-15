@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Broker\MessagePublisher;
-use App\Event\ConversationEvent;
+use App\Event\MessageEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MessageCreatedSubscriber implements EventSubscriberInterface
@@ -29,12 +29,12 @@ class MessageCreatedSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            ConversationEvent::MESSAGE_CREATED => 'onMessageCreated'
+            MessageEvent::CREATED => 'onMessageCreated'
         ];
     }
 
-    public function onMessageCreated(ConversationEvent $event)
+    public function onMessageCreated(MessageEvent $event)
     {
-        $this->publisher->messageAdded($event->getConversation(), $event->getMessage());
+        $this->publisher->messageAdded($event->getMessage()->getConversation(), $event->getMessage());
     }
 }
