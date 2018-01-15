@@ -1,13 +1,15 @@
 version: "2"
 services:
     db:
-        image: mongo:latest
+        image: postgres:9.6-alpine
         environment:
-          - MONGO_DATA_DIR=/data/db
+            - POSTGRES_DB=api
+            - POSTGRES_USER=symfony
+            - POSTGRES_PASSWORD=symfony
         volumes:
-          - ./data/db:/data/db:cached
+            - ./data:/var/lib/postgresql/data:cached
         ports:
-          - 27017:27017
+            - 5432:5432
     php:
         build: ./php-fpm
         ports:
@@ -21,7 +23,7 @@ services:
     nginx:
         build: ./nginx
         ports:
-            - 80:80
+            - 8007:80
         links:
             - php
         volumes_from:
@@ -33,13 +35,14 @@ services:
         environment:
             RABBITMQ_ERLANG_COOKIE: "SECRET"
             RABBITMQ_DEFAULT_USER: "admin"
-            RABBITMQ_DEFAULT_PASS: "rabbitmq"
+            RABBITMQ_DEFAULT_PASS: "admin"
             RABBITMQ_DEFAULT_VHOST: "/"
         ports:
             - 15672:15672
             - 5672:5672
         volumes:
-            - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:cached  
+            - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:cached
+            - ./rabbitmq/setup.sh:/etc/rabbitmq/setup.sh
     wsb:
         build: ./wsb
         environment:
