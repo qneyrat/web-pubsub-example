@@ -1,0 +1,25 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Migrations,Tests}'
+
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    Swarrot\SwarrotBundle\Broker\Publisher: '@swarrot.publisher'
+
+    App\EventSubscriber\Doctrine\MessageSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+    App\EventSubscriber\MessageCreatedSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }

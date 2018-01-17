@@ -1,0 +1,56 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Controller;
+
+use App\Entity\Conversation;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class ConversationController extends Controller
+{
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * UserController constructor.
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
+    /**
+     * @Route("/conversations/{id}")
+     *
+     * @param Conversation $conversation
+     * @return JsonResponse
+     */
+    public function getConversationAction(Conversation $conversation)
+    {
+        return JsonResponse::fromJsonString(
+            $this->serializer->serialize($conversation, 'json', ['groups' => ['conversation']])
+        );
+    }
+
+    /**
+     * @Route("/conversations/{id}/messages")
+     * @Method({"POST"})
+     * @param Request $request
+     * @param Conversation $conversation
+     *
+     * @return Response
+     */
+    public function createMessageAction(Request $request, Conversation $conversation)
+    {
+        return new Response();
+    }
+}
