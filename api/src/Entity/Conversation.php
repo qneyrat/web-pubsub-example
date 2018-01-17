@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
@@ -15,16 +16,23 @@ class Conversation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="conversations")
+     * @ORM\ManyToMany(targetEntity="User", cascade={"persist"})
+     * @ORM\JoinTable(name="conversation_user")
+     *
+     * @Groups({"conversation"})
      */
     private $users;
 
     /**
-     * @ORM\OneToMany(targetEntity="Message", mappedBy="conversation")
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="conversation", cascade={"persist"})
+     *
+     * @Groups({"conversation"})
      */
     private $messages;
 
@@ -43,11 +51,11 @@ class Conversation
     }
 
     /**
-     * @param mixed $messages
+     * @param Message $message
      */
-    public function setMessages($messages): void
+    public function addMessage(Message $message): void
     {
-        $this->messages = $messages;
+        $this->messages[] = $message;
     }
 
     /**
@@ -67,10 +75,10 @@ class Conversation
     }
 
     /**
-     * @param mixed $users
+     * @param User $user
      */
-    public function setUsers($users): void
+    public function addUser(User $user): void
     {
-        $this->users = $users;
+        $this->users[] = $user;
     }
 }

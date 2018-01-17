@@ -4,3 +4,7 @@ api_login_check:
 user:
     type:     annotation
     resource: App\Controller\UserController
+
+conversation:
+    type:     annotation
+    resource: App\Controller\ConversationController

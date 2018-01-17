@@ -42,9 +42,9 @@ class CreateUserCommand  extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $user = new User();
-        $user->setUsername('test2');
+        $user->setUsername('test');
 
-        $plainPassword = 'test2';
+        $plainPassword = 'test';
         $encoded = $this->encoder->encodePassword($user, $plainPassword);
 
         $user->setPassword($encoded);

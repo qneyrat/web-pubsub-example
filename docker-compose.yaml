@@ -6,8 +6,6 @@ services:
             - POSTGRES_DB=api
             - POSTGRES_USER=symfony
             - POSTGRES_PASSWORD=symfony
-        volumes:
-            - ./data:/var/lib/postgresql/data:cached
         ports:
             - 5432:5432
     php:

@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(name="`user`")
  */
 class User implements UserInterface
 {
@@ -16,11 +17,13 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"user", "conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string")
+     * @Groups({"user", "conversation"})
      */
     private $username;
 
@@ -28,17 +31,6 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Conversation", inversedBy="users")
-     * @ORM\JoinTable(name="users_conversations")
-     */
-    private $conversations;
-
-    public function __construct()
-    {
-        $this->conversations = new ArrayCollection();
-    }
 
     /**
      * {@inheritdoc}

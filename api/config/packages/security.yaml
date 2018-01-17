@@ -1,9 +1,9 @@
 security:
     encoders:
-        App\Document\User: bcrypt
+        App\Entity\User: bcrypt
     providers:
         user_provider:
-            entity: {class: App\Document\User, property: username}
+            entity: {class: App\Entity\User, property: username}
     firewalls:
         login:
             pattern:  ^/login

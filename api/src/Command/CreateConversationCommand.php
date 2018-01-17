@@ -5,6 +5,7 @@ namespace App\Command;
 
 use App\Entity\Conversation;
 use App\Entity\Message;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,15 +35,20 @@ class CreateConversationCommand  extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $userId = '5a5a13ea9e3773014d6c9f21';
+        $user = $this->entityManager->getRepository(User::class)->find(1);
+        if (!$user instanceof User) {
+            return;
+        }
+
         $conversation = new Conversation();
-        $conversation->setUsers([$userId]);
+        $conversation->addUser($user);
 
         $message = new Message();
-        $message->setFrom($userId);
+        $message->setFrom($user);
         $message->setBody('hello world!');
+        $message->setConversation($conversation);
 
-        $conversation->setMessages([$message]);
+        $conversation->addMessage($message);
 
         $this->entityManager->persist($conversation);
         $this->entityManager->flush();
