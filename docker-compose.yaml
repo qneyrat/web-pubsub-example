@@ -11,17 +11,17 @@ services:
         ports:
             - 5432:5432
     php:
-        build: ./php-fpm
+        build: ./archi/php-fpm
         ports:
             - 9000:9000
         volumes:
-            - ./symfony:/var/www/symfony:cached
+            - ./api:/var/www/symfony:cached
             - ./logs/symfony:/var/www/symfony/var/logs:cached
         links:
             - db
             - rabbitmq
     nginx:
-        build: ./nginx
+        build: ./archi/nginx
         ports:
             - 8007:80
         links:
@@ -41,8 +41,8 @@ services:
             - 15672:15672
             - 5672:5672
         volumes:
-            - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:cached
-            - ./rabbitmq/setup.sh:/etc/rabbitmq/setup.sh
+            - ./archi/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:cached
+            - ./archi/rabbitmq/setup.sh:/etc/rabbitmq/setup.sh
     wsb:
         build: ./wsb
         environment:
