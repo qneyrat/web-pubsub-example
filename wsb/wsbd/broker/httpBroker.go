@@ -8,9 +8,9 @@ import (
 	"github.com/qneyrat/wsb/wsbd/message"
 )
 
-type HttpBroker struct {}
+type HttpBroker struct{}
 
-func (b* HttpBroker) Handle(c *channel.Channel) {
+func (b *HttpBroker) Handle(c *channel.Channel) {
 	http.HandleFunc("/actions", func(w http.ResponseWriter, r *http.Request) {
 		str := `{"message": "1"}`
 		log.Printf("new message  %v", str)
@@ -18,6 +18,7 @@ func (b* HttpBroker) Handle(c *channel.Channel) {
 		body := []byte(str)
 		message := message.Message{
 			From: "all",
+			To:   "all",
 			Body: body,
 		}
 

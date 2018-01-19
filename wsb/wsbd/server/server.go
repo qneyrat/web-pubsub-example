@@ -9,9 +9,9 @@ import (
 )
 
 type Server struct {
-	Clients  client.Clients
-	Channels channel.Channels
-	Broker Broker
+	Clients client.Clients
+	Channel *channel.Channel
+	Broker  Broker
 }
 
 type Broker interface {
@@ -20,31 +20,26 @@ type Broker interface {
 
 func NewServer(b Broker) *Server {
 	c := &channel.Channel{
-		ID:      "all",
-		Chan:    make(chan message.Message),
-		Clients: make(client.Clients),
+		Chan: make(chan message.Message),
 	}
 
 	s := &Server{
-		Clients:  make(client.Clients),
-		Channels: make(channel.Channels),
+		Clients: make(client.Clients),
+		Channel: c,
+		Broker:  b,
 	}
-
-	s.AddChannel(c)
-	s.Broker = b
 
 	return s
 }
 
-func (s *Server) AddChannel(c *channel.Channel) {
-	s.Channels[c.ID] = c
-}
-
 func (s *Server) Start() error {
-	go s.Broker.Handle(s.Channels["all"])
+	go s.Broker.Handle(s.Channel)
 	go s.handleMessages()
 
-	http.HandleFunc("/websocket", s.handleConnections)
+	http.Handle(
+		"/websocket",
+		jwtMiddleware(http.HandlerFunc(s.handleConnections)),
+	)
 
 	return http.ListenAndServe(":4000", nil)
 }
