@@ -128,8 +128,9 @@ class Message
     {
         return [
             'id' => $this->id,
-            'from' => $this->getFrom()->getId(),
+            'from' => $this->getFrom()->getUsername(),
             'to' => $this->getTo(),
+            'conversation' => $this->getConversation()->getId(),
             'body' => $this->getBody(),
         ];
     }

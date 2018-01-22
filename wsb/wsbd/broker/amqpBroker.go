@@ -1,6 +1,7 @@
 package broker
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/streadway/amqp"
@@ -8,6 +9,12 @@ import (
 	"github.com/qneyrat/wsb/wsbd/channel"
 	"github.com/qneyrat/wsb/wsbd/message"
 )
+
+type ApiMessage struct {
+	From string `json:"from"`
+	To   string `json:"to"`
+	Body string `json:"body"`
+}
 
 type AmqpBroker struct{}
 
@@ -64,8 +71,16 @@ func (b *AmqpBroker) Handle(c *channel.Channel) {
 	go func() {
 		for d := range msgs {
 			log.Printf(" [x] %s", d.Body)
+
+			data := &ApiMessage{}
+			err := json.Unmarshal(d.Body, data)
+			if err != nil {
+				log.Fatalf("%s", err)
+			}
+
 			message := message.Message{
-				From: "all",
+				From: data.From,
+				To:   data.To,
 				Body: d.Body,
 			}
 

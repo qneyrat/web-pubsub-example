@@ -1,10 +1,7 @@
-function addItem(message) {
-    const item = document.createElement('div');
-    item.textContent = message;
-    item.className = 'item alert';
-    document.getElementsByClassName('root')[0].appendChild(item);
-}
+token = 'eyJhbGciOiJSUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcm5hbWUiOiJ0ZXN0MiIsImlhdCI6MTUxNjY1NzkzOCwiZXhwIjoxNTE2NjYxNTM4fQ.GyOOdRnEyhzEhcEjM7Pka58XMUaW2SZXUo8ETVpbxHZdSlyxn76DjL407_cHw9Auwe2JOqK4f-tIaU-J-uS-Rgz5AAdyJ9vf2zavNTUhBqJzhHA6wJlxMazsfsZhDl3nrzPxZmAwUqTh0oBpBBfDJhLpj062WM130KHtGxZ51wetrbBoESXzwTkelTq6WGCsg-J8chPTOHSB1-Ob5fPtuIZTfmRHYAKK9cYUlE3z3mxpPglHyQV9VIep71qLztIGwXmmBnmAwYqhBFq8mAUPSnD8HBMUzcXQGnXeCGyaWOea5h57XnHJ6RwyncURqF2f7Gkba4js9jqfX64fA-pf-Umz1Qk_k5X7-WqAcoGGGJhkAAgUhZLMbg80ufV82L_KB3OFptiKzuD0ZeMJQ5VYpXuNoD4gFGf9syVKBeS1Abz4GjvNCqp73MSalll3D5YBJdHhy7xsHAYWYUE_CSOj2TCX2fBvnTVqAaqqc9q4HD-Tq97qi1S4zaGP1vyy9PbAxkwaO6ECv1sQLSZjUqKSE2ZdnVvoZz_9UAQkavd_hFKLkHx2t_-99BH5zW9ry_Mpj9ZAkncArlFyquU7H7NiQDIFye71PUjUXFLHuwO_N_MRWZuHuRVzDlBGElH6N68gMbpBUTh9EV4Ugq-953Ioqamo_c2p-ZIiTKKHI7ntTIE';
+url = 'ws://localhost:4000/websocket?token='+token;
 
-for (let index = 0; index < 100; index++) {
-    addItem('test '+index);
-}
+ws = new WebSocket(url);
+ws.onopen = function (event) {
+   console.log("Here's some text that the server is urgently awaiting!"); 
+};

@@ -8,6 +8,12 @@ import (
 	"github.com/qneyrat/wsb/wsbd/message"
 )
 
+const sessionKey string = "Session"
+
+type Session struct {
+	Identifier string
+}
+
 type Server struct {
 	Clients client.Clients
 	Channel *channel.Channel
@@ -41,5 +47,5 @@ func (s *Server) Start() error {
 		jwtMiddleware(http.HandlerFunc(s.handleConnections)),
 	)
 
-	return http.ListenAndServe(":4001", nil)
+	return http.ListenAndServe(":4000", nil)
 }

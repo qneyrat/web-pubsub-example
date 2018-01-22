@@ -1,12 +1,12 @@
 package server
 
 import (
+	"context"
 	"crypto/rsa"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
@@ -29,21 +29,15 @@ func init() {
 
 func jwtMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
-			http.Error(w, "No token found!", http.StatusUnauthorized)
+		keys, ok := r.URL.Query()["token"]
+		if !ok || len(keys) < 1 {
+			w.WriteHeader(http.StatusUnauthorized)
+			log.Println("Url Param 'token' is missing")
 
 			return
 		}
 
-		authHeaderParts := strings.Split(authHeader, " ")
-		if len(authHeaderParts) != 2 || strings.ToLower(authHeaderParts[0]) != "bearer" {
-			http.Error(w, "Authorization header format must be Bearer {token}!", http.StatusUnauthorized)
-
-			return
-		}
-		authToken := authHeaderParts[1]
-		jwtToken, err := jwt.Parse(authToken, func(token *jwt.Token) (interface{}, error) {
+		jwtToken, err := jwt.Parse(keys[0], func(token *jwt.Token) (interface{}, error) {
 			return verifyKey, nil
 		})
 
@@ -83,10 +77,20 @@ func jwtMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		if claims, ok := jwtToken.Claims.(jwt.MapClaims); ok && jwtToken.Valid {
-			log.Printf("username: %s\n", claims["username"])
+		claims, ok := jwtToken.Claims.(jwt.MapClaims)
+		if !ok && !jwtToken.Valid {
+			w.WriteHeader(http.StatusUnauthorized)
+			fmt.Fprintln(w, "Invalid Token!")
+
+			return
 		}
 
-		next.ServeHTTP(w, r)
+		ctx := context.WithValue(
+			r.Context(),
+			sessionKey,
+			Session{Identifier: claims["username"].(string)},
+		)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

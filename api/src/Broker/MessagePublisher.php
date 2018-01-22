@@ -28,7 +28,7 @@ class MessagePublisher
     {
         foreach($conversation->getUsers() as $user) {
             if($message->getFrom() !== $user) {
-                $message->setTo($user->getId());
+                $message->setTo($user->getUsername());
 
                 $payload = json_encode($message->denormalize());
                 $this->publisher->publish(

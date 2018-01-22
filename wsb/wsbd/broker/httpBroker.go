@@ -1,6 +1,7 @@
 package broker
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -12,14 +13,18 @@ type HttpBroker struct{}
 
 func (b *HttpBroker) Handle(c *channel.Channel) {
 	http.HandleFunc("/actions", func(w http.ResponseWriter, r *http.Request) {
-		str := `{"message": "1"}`
-		log.Printf("new message  %v", str)
+		str := []byte(`{"from": "1", "to": "test", "body": "1"}`)
 
-		body := []byte(str)
+		data := &ApiMessage{}
+		err := json.Unmarshal(str, data)
+		if err != nil {
+			log.Fatalf("%s", err)
+		}
+
 		message := message.Message{
-			From: "all",
-			To:   "all",
-			Body: body,
+			From: data.From,
+			To:   data.To,
+			Body: str,
 		}
 
 		c.Chan <- message
