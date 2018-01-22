@@ -5,3 +5,37 @@ ws = new WebSocket(url);
 ws.onopen = function (event) {
    console.log("Here's some text that the server is urgently awaiting!"); 
 };
+
+var details = {
+    'userName': 'test@gmail.com',
+    'password': 'Password!',
+    'grant_type': 'password'
+};
+
+var formBody = [];
+for (var property in details) {
+  var encodedKey = encodeURIComponent(property);
+  var encodedValue = encodeURIComponent(details[property]);
+  formBody.push(encodedKey + "=" + encodedValue);
+}
+formBody = formBody.join("&");
+
+fetch('https://example.com/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+  },
+  body: formBody
+})
+
+fetch('products.json')
+.then(function(response) { return response.json(); })
+.then(function(json) {
+  for(var i = 0; i < json.products.length; i++) {
+    var listItem = document.createElement('li');
+    listItem.innerHTML = '<strong>' + json.products[i].Name + '</strong>';
+    listItem.innerHTML +=' can be found in ' + json.products[i].Location + '.';
+    listItem.innerHTML +=' Cost: <strong>£' + json.products[i].Price + '</strong>';
+    myList.appendChild(listItem);
+  }
+});
