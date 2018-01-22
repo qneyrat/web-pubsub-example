@@ -30,20 +30,8 @@ class MessageSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            'prePersist',
             'postPersist',
         ];
-    }
-
-    public function prePersist(LifecycleEventArgs $args)
-    {
-        if (!$args->getObject() instanceof Message) {
-            return;
-        }
-
-        $message = $args->getObject();
-        $conversation = $message->getConversation();
-        $conversation->addMessage($message);
     }
 
     public function postPersist(LifecycleEventArgs $args)

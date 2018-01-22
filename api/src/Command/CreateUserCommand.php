@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Entity\Conversation;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -41,13 +42,20 @@ class CreateUserCommand  extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $user = new User();
-        $user->setUsername('test');
+        $conversation = $this->entityManager->getRepository(Conversation::class)->find(1);
+        if (!$conversation instanceof conversation) {
+            return;
+        }
 
-        $plainPassword = 'test';
+        $user = new User();
+        $user->setUsername('test2');
+
+        $plainPassword = 'test2';
         $encoded = $this->encoder->encodePassword($user, $plainPassword);
 
         $user->setPassword($encoded);
+
+        $conversation->addUser($user);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

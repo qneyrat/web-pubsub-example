@@ -11,5 +11,5 @@ swarrot:
     messages_types:
         message:
             connection: "default"
-            exchange: "default"
+            exchange: "api"
             routing_key: "api.conversation"

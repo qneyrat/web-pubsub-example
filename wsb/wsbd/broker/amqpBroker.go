@@ -38,7 +38,7 @@ func (b *AmqpBroker) Handle(c *channel.Channel) {
 
 	err = ch.QueueBind(
 		q.Name, // queue name
-		"api.conversation.*.message.added", // routing key
+		"api.conversation.*.message.*.added", // routing key
 		"api", // exchange
 		false,
 		nil)

@@ -41,5 +41,5 @@ func (s *Server) Start() error {
 		jwtMiddleware(http.HandlerFunc(s.handleConnections)),
 	)
 
-	return http.ListenAndServe(":4000", nil)
+	return http.ListenAndServe(":4001", nil)
 }

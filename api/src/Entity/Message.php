@@ -16,31 +16,36 @@ class Message
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      *
-     * @Groups({"conversation"})
+     * @Groups({"conversation", "message"})
      */
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      *
-     * @Groups({"conversation"})
+     * @Groups({"conversation", "message"})
      */
     private $from;
 
     /**
      * @ORM\Column(type="string")
      *
-     * @Groups({"conversation"})
+     * @Groups({"conversation", "message"})
      */
     private $body;
 
     /**
      * @ORM\ManyToOne(targetEntity="Conversation", inversedBy="messages")
      * @ORM\JoinColumn(name="conversation_id", referencedColumnName="id")
+     *
+     * @Groups({"message"})
      */
     private $conversation;
 
+    /**
+     * @Groups({"message"})
+     */
     private $to;
 
     /**
@@ -52,39 +57,39 @@ class Message
     }
 
     /**
-     * @return mixed
+     * @return User
      */
-    public function getFrom()
+    public function getFrom(): User
     {
         return $this->from;
     }
 
     /**
-     * @param mixed $from
+     * @param User $from
      */
-    public function setFrom($from): void
+    public function setFrom(User $from): void
     {
         $this->from = $from;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBody()
+    public function getBody():? string
     {
         return $this->body;
     }
 
     /**
-     * @param mixed $body
+     * @param string $body
      */
-    public function setBody($body): void
+    public function setBody(string $body): void
     {
         $this->body = $body;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getTo()
     {
@@ -108,10 +113,24 @@ class Message
     }
 
     /**
-     * @param mixed $conversation
+     * @param Conversation $conversation
      */
-    public function setConversation($conversation)
+    public function setConversation(Conversation $conversation)
     {
+        $conversation->addMessage($this);
         $this->conversation = $conversation;
+    }
+
+    /**
+     * @return array
+     */
+    public function denormalize(): array
+    {
+        return [
+            'id' => $this->id,
+            'from' => $this->getFrom()->getId(),
+            'to' => $this->getTo(),
+            'body' => $this->getBody(),
+        ];
     }
 }
