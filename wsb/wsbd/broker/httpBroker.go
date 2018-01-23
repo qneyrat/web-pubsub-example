@@ -9,9 +9,9 @@ import (
 	"chat-example/wsb/wsbd/message"
 )
 
-type HttpBroker struct{}
+type HTTPBroker struct{}
 
-func (b *HttpBroker) Handle(c *channel.Channel) {
+func (b *HTTPBroker) Handle(c *channel.Channel) {
 	http.HandleFunc("/actions", func(w http.ResponseWriter, r *http.Request) {
 		str := `{"from": "test2", "to": "test", "body": "1"}`
 

@@ -10,9 +10,9 @@ import (
 	"chat-example/wsb/wsbd/message"
 )
 
-type AmqpBroker struct{}
+type AMQPBroker struct{}
 
-func (b *AmqpBroker) Handle(c *channel.Channel) {
+func (b *AMQPBroker) Handle(c *channel.Channel) {
 	conn, err := amqp.Dial("amqp://admin:admin@rabbitmq:5672/")
 	if err != nil {
 		log.Fatalf("%s", err)

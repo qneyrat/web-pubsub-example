@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/websocket"
 
+	"chat-example/wsb/wsbd/auth"
 	"chat-example/wsb/wsbd/channel"
 	"chat-example/wsb/wsbd/client"
 	"chat-example/wsb/wsbd/message"
@@ -37,7 +38,7 @@ func (s *Server) Start() error {
 
 	http.Handle(
 		"/websocket",
-		jwtMiddleware(http.HandlerFunc(s.handleConnections)),
+		auth.JWTMiddleware(http.HandlerFunc(s.handleConnections)),
 	)
 
 	return http.ListenAndServe(":4000", nil)
@@ -60,7 +61,7 @@ func (s *Server) handleMessages() {
 }
 
 func (s *Server) handleConnections(w http.ResponseWriter, r *http.Request) {
-	id := r.Context().Value(sessionKey).(Session).Identifier
+	id := r.Context().Value(auth.SessionContextKey).(auth.Session).Identifier
 	log.Printf("New client connected with ID %v!", id)
 
 	upgrader := websocket.Upgrader{

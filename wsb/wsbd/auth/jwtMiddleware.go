@@ -1,4 +1,4 @@
-package server
+package auth
 
 import (
 	"context"
@@ -27,7 +27,7 @@ func init() {
 	}
 }
 
-func jwtMiddleware(next http.Handler) http.Handler {
+func JWTMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		keys, ok := r.URL.Query()["token"]
 		if !ok || len(keys) < 1 {
@@ -45,8 +45,14 @@ func jwtMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
+		if !jwtToken.Valid {
+			w.WriteHeader(http.StatusUnauthorized)
+
+			return
+		}
+
 		claims, ok := jwtToken.Claims.(jwt.MapClaims)
-		if !ok && !jwtToken.Valid {
+		if !ok {
 			w.WriteHeader(http.StatusUnauthorized)
 
 			return
@@ -54,9 +60,9 @@ func jwtMiddleware(next http.Handler) http.Handler {
 
 		ctx := context.WithValue(
 			r.Context(),
-			sessionKey,
+			SessionContextKey,
 			Session{Identifier: claims["username"].(string)},
-		)
+)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
