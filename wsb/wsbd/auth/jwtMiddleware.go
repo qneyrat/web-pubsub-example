@@ -33,7 +33,6 @@ func JWTMiddleware(next http.Handler) http.Handler {
 		if !ok || len(keys) < 1 {
 			w.WriteHeader(http.StatusUnauthorized)
 			fmt.Fprintln(w, "Url Param 'token' is missing!")
-
 			return
 		}
 
@@ -41,20 +40,17 @@ func JWTMiddleware(next http.Handler) http.Handler {
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			fmt.Fprintln(w, "Invalid Token!")
-
 			return
 		}
 
 		if !jwtToken.Valid {
 			w.WriteHeader(http.StatusUnauthorized)
-
 			return
 		}
 
 		claims, ok := jwtToken.Claims.(jwt.MapClaims)
 		if !ok {
 			w.WriteHeader(http.StatusUnauthorized)
-
 			return
 		}
 
@@ -62,7 +58,7 @@ func JWTMiddleware(next http.Handler) http.Handler {
 			r.Context(),
 			SessionContextKey,
 			Session{Identifier: claims["username"].(string)},
-)
+		)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

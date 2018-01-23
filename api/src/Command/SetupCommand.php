@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Entity\Conversation;
+use App\Entity\Message;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -11,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class CreateUserCommand  extends Command
+class SetupCommand  extends Command
 {
     /**
      * @var EntityManagerInterface
@@ -37,27 +38,36 @@ class CreateUserCommand  extends Command
 
     protected function configure()
     {
-        $this->setName('app:create-user');
+        $this->setName('app:setup');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $conversation = $this->entityManager->getRepository(Conversation::class)->find(1);
-        if (!$conversation instanceof conversation) {
-            return;
-        }
+        $user1 = new User();
+        $user1->setUsername('test1');
+        $user1->setPassword($this->encoder->encodePassword($user1, 'test1'));
 
-        $user = new User();
-        $user->setUsername('test2');
+        $this->entityManager->persist($user1);
 
-        $plainPassword = 'test2';
-        $encoded = $this->encoder->encodePassword($user, $plainPassword);
+        $user2 = new User();
+        $user2->setUsername('test2');
+        $user2->setPassword($this->encoder->encodePassword($user2, 'test2'));
 
-        $user->setPassword($encoded);
+        $this->entityManager->persist($user2);
 
-        $conversation->addUser($user);
+        $conversation = new Conversation();
+        $conversation->addUser($user1);
+        $conversation->addUser($user2);
 
-        $this->entityManager->persist($user);
+        $message = new Message();
+        $message->setFrom($user1);
+        $message->setBody('hello world!');
+        $message->setConversation($conversation);
+
+        $conversation->addMessage($message);
+
+        $this->entityManager->persist($conversation);
+
         $this->entityManager->flush();
     }
 }

@@ -47,7 +47,6 @@ func (s *Server) Start() error {
 func (s *Server) handleMessages() {
 	for {
 		message := <-s.Channel.Chan
-		log.Printf(" [v] %s", message.Body)
 		if client, ok := s.Clients[message.To]; ok {
 			ws := client.Conn
 			err := ws.WriteMessage(1, []byte(message.Body))
@@ -86,10 +85,12 @@ func (s *Server) handleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for {
-		_, _, err := ws.ReadMessage()
+		messageType, message, err := ws.ReadMessage()
 		if err != nil {
 			log.Printf("Error on ReadMessage %v!", err)
 			break
 		}
+
+		log.Printf("Message %v received by server %v", messageType, string(message))
 	}
 }

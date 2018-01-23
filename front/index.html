@@ -2,49 +2,45 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">  
   </head>
   <body>
     <div class="container">
-      <div id="form-signin">
-          <div class="col-12 col-md-auto">
-            <form style="margin-top: 10px">
-              <div class="form-group row">
-                <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
-                <div class="col-sm-10">
-                  <input class="form-control" id="inputUsername" placeholder="Username">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-                <div class="col-sm-10">
-                  <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-                </div>
-              </div>
-              <div class="form-group row">
-                <div class="offset-sm-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary">Sign in</button>
-                </div>
-              </div>
-            </form>
+      <div class="col-12 col-md-auto">
+        <div id="signin-form" style="margin-top: 10px">
+          <div class="form-group row">
+            <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-10">
+              <input class="form-control" id="inputUsername" placeholder="Username">
+            </div>
           </div>
-          <div class="col-12 col-md-auto"><p>Connect with user: test</p></div>
-          <div id="form-message">
-            <form class="form-inline">
-              <div class="form-group mx-sm-3">
-                <label for="inputMessage" class="sr-only">Message</label>
-                <input class="form-control" id="inputMessage" placeholder="Message">
-              </div>
-              <button type="submit" class="btn btn-primary">></button>
-            </form>
+          <div class="form-group row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+            </div>
           </div>
-          <div style="margin-top: 25px" class="col-12 col-md-auto" id="messages">
-            <p>message 1</p>
-            <p>message 2</p>
+          <div class="form-group row">
+            <div class="offset-sm-2 col-sm-10">
+              <button type="submit" class="btn btn-primary" id="signin-button">Sign in</button>
+            </div>
           </div>
+        </div>
       </div>
+      <div class="col-12 col-md-auto">
+        <div id="user-info">Connect with user:</div>
+      </div>
+      <div id="message-form" class="form-inline">
+        <div class="form-group mx-sm-3">
+          <label for="inputMessage" class="sr-only">Message</label>
+          <input class="form-control" id="inputMessage" placeholder="Message">
+        </div>
+        <button type="submit" class="btn btn-primary" id="message-button">></button>
+      </div>
+      <div style="margin-top: 25px" class="col-12 col-md-auto" id="messages"></div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     <script src="index.js"></script>
   </body>
