@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 
-	"github.com/qneyrat/wsb/wsbd/broker"
-	"github.com/qneyrat/wsb/wsbd/server"
+	"chat-example/wsb/wsbd/broker"
+	"chat-example/wsb/wsbd/server"
 )
 
 func main() {
-	wbd := server.NewServer(&broker.AmqpBroker{})
+	wbd := server.NewServer(&broker.HttpBroker{})
 	err := wbd.Start()
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)

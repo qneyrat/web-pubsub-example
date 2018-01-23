@@ -6,15 +6,9 @@ import (
 
 	"github.com/streadway/amqp"
 
-	"github.com/qneyrat/wsb/wsbd/channel"
-	"github.com/qneyrat/wsb/wsbd/message"
+	"chat-example/wsb/wsbd/channel"
+	"chat-example/wsb/wsbd/message"
 )
-
-type ApiMessage struct {
-	From string `json:"from"`
-	To   string `json:"to"`
-	Body string `json:"body"`
-}
 
 type AmqpBroker struct{}
 
@@ -31,48 +25,27 @@ func (b *AmqpBroker) Handle(c *channel.Channel) {
 	}
 	defer ch.Close()
 
-	q, err := ch.QueueDeclare(
-		"messages", // name of the queue
-		true,       // durable
-		false,      // delete when unused
-		false,      // exclusive
-		false,      // noWait
-		nil,        // arguments
-	)
+	q, err := ch.QueueDeclare("messages", true, false, false, false, nil)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	err = ch.QueueBind(
-		q.Name, // queue name
-		"api.conversation.*.message.*.added", // routing key
-		"api", // exchange
-		false,
-		nil)
+	err = ch.QueueBind(q.Name, "api.conversation.*.message.*.added", "api", false, nil)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	msgs, err := ch.Consume(
-		q.Name, // queue
-		"",     // consumer
-		true,   // auto-ack
-		false,  // exclusive
-		false,  // no-local
-		false,  // no-wait
-		nil,    // args
-	)
+	msgs, err := ch.Consume(q.Name, "", true, false, false, false, nil)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
 	forever := make(chan bool)
-
 	go func() {
 		for d := range msgs {
 			log.Printf(" [x] %s", d.Body)
 
-			data := &ApiMessage{}
+			data := &message.Message{}
 			err := json.Unmarshal(d.Body, data)
 			if err != nil {
 				log.Fatalf("%s", err)
@@ -81,13 +54,11 @@ func (b *AmqpBroker) Handle(c *channel.Channel) {
 			message := message.Message{
 				From: data.From,
 				To:   data.To,
-				Body: d.Body,
+				Body: string(d.Body),
 			}
 
 			c.Chan <- message
 		}
 	}()
-
-	log.Printf(" [*] Waiting for logs. To exit press CTRL+C")
 	<-forever
 }

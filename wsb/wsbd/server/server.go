@@ -1,27 +1,20 @@
 package server
 
 import (
+	"log"
 	"net/http"
 
-	"github.com/qneyrat/wsb/wsbd/channel"
-	"github.com/qneyrat/wsb/wsbd/client"
-	"github.com/qneyrat/wsb/wsbd/message"
+	"github.com/gorilla/websocket"
+
+	"chat-example/wsb/wsbd/channel"
+	"chat-example/wsb/wsbd/client"
+	"chat-example/wsb/wsbd/message"
 )
-
-const sessionKey string = "Session"
-
-type Session struct {
-	Identifier string
-}
 
 type Server struct {
 	Clients client.Clients
 	Channel *channel.Channel
 	Broker  Broker
-}
-
-type Broker interface {
-	Handle(c *channel.Channel)
 }
 
 func NewServer(b Broker) *Server {
@@ -48,4 +41,54 @@ func (s *Server) Start() error {
 	)
 
 	return http.ListenAndServe(":4000", nil)
+}
+
+func (s *Server) handleMessages() {
+	for {
+		message := <-s.Channel.Chan
+		log.Printf(" [v] %s", message.Body)
+		if client, ok := s.Clients[message.To]; ok {
+			ws := client.Conn
+			err := ws.WriteMessage(1, []byte(message.Body))
+			if err != nil {
+				log.Printf("Error on WriteMessage %v!", err)
+				ws.Close()
+				delete(s.Clients, client.ID)
+			}
+		}
+	}
+}
+
+func (s *Server) handleConnections(w http.ResponseWriter, r *http.Request) {
+	id := r.Context().Value(sessionKey).(Session).Identifier
+	log.Printf("New client connected with ID %v!", id)
+
+	upgrader := websocket.Upgrader{
+		EnableCompression: true,
+		ReadBufferSize:    1024,
+		WriteBufferSize:   1024,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
+
+	ws, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("Error on Upgrade %v!", err)
+		return
+	}
+	defer ws.Close()
+
+	s.Clients[id] = &client.Client{
+		ID:   id,
+		Conn: ws,
+	}
+
+	for {
+		_, _, err := ws.ReadMessage()
+		if err != nil {
+			log.Printf("Error on ReadMessage %v!", err)
+			break
+		}
+	}
 }

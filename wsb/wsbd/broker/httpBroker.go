@@ -5,18 +5,18 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/qneyrat/wsb/wsbd/channel"
-	"github.com/qneyrat/wsb/wsbd/message"
+	"chat-example/wsb/wsbd/channel"
+	"chat-example/wsb/wsbd/message"
 )
 
 type HttpBroker struct{}
 
 func (b *HttpBroker) Handle(c *channel.Channel) {
 	http.HandleFunc("/actions", func(w http.ResponseWriter, r *http.Request) {
-		str := []byte(`{"from": "1", "to": "test", "body": "1"}`)
+		str := `{"from": "test2", "to": "test", "body": "1"}`
 
-		data := &ApiMessage{}
-		err := json.Unmarshal(str, data)
+		data := &message.Message{}
+		err := json.Unmarshal([]byte(str), data)
 		if err != nil {
 			log.Fatalf("%s", err)
 		}
