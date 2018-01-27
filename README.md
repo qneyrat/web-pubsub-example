@@ -12,6 +12,7 @@ Example with simple chat
 * Create database and setup API:
 ```
 > $ docker exec -it chatexample_php_1 sh
+> $ composer install
 > $ bin/console doctrine:schema:create
 > $ bin/console app:setup
 ```
