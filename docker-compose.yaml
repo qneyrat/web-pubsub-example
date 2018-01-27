@@ -21,7 +21,7 @@ services:
     nginx:
         build: ./archi/nginx
         ports:
-            - 8007:80
+            - 80:80
         links:
             - php
         volumes_from:
