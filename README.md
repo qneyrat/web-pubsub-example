@@ -2,12 +2,9 @@
 Example with simple chat
 
 ## ARCHI:
----
 ![schema](docs/schema.png)
 
 ## Start project:
----
-
 * Start containers:
 ```
 > $ docker-compose up
@@ -30,8 +27,6 @@ Example with simple chat
 ```
 
 ## Run CLI Client:
----
-
 * Get dependencies:
 ```
 > $ cd client
