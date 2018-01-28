@@ -11,15 +11,13 @@ Example with simple chat
 ```
 * Create database and setup API:
 ```
-> $ docker exec -it chatexample_php_1 sh
-> $ composer install
-> $ bin/console doctrine:schema:create
-> $ bin/console app:setup
+> $ docker-compose exec php composer install
+> $ docker-compose exec php bin/console doctrine:schema:create
+> $ docker-compose exec php bin/console app:setup
 ```
 * Setup RabbitMq:
 ```
-> $ docker exec -it chatexample_rabbitmq_1 sh
-> $ sh /etc/rabbitmq/setup.sh
+> $ docker-compose exec rabbitmq sh /etc/rabbitmq/setup.sh
 ```
 
 * Restart containers:
