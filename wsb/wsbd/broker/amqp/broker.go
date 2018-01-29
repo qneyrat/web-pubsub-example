@@ -1,4 +1,4 @@
-package broker
+package amqp
 
 import (
 	"encoding/json"
@@ -10,9 +10,13 @@ import (
 	"chat-example/wsb/wsbd/message"
 )
 
-type AMQPBroker struct{}
+type Handler interface {
+	Handle(c *channel.Channel)
+}
 
-func (b *AMQPBroker) Handle(c *channel.Channel) {
+type Broker struct{}
+
+func (b *Broker) Handle(c *channel.Channel) {
 	conn, err := amqp.Dial("amqp://admin:admin@rabbitmq:5672/")
 	if err != nil {
 		log.Fatalf("%s", err)

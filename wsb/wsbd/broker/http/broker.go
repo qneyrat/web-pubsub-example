@@ -1,17 +1,20 @@
-package broker
+package http
 
 import (
+	"chat-example/wsb/wsbd/channel"
+	"chat-example/wsb/wsbd/message"
 	"encoding/json"
 	"log"
 	"net/http"
-
-	"chat-example/wsb/wsbd/channel"
-	"chat-example/wsb/wsbd/message"
 )
 
-type HTTPBroker struct{}
+type Handler interface {
+	Handle(c *channel.Channel)
+}
 
-func (b *HTTPBroker) Handle(c *channel.Channel) {
+type Broker struct{}
+
+func (b *Broker) Handle(c *channel.Channel) {
 	http.HandleFunc("/actions", func(w http.ResponseWriter, r *http.Request) {
 		str := `{"from": "test2", "to": "test", "body": "1"}`
 

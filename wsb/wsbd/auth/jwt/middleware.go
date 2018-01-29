@@ -1,6 +1,7 @@
-package auth
+package jwt
 
 import (
+	"chat-example/wsb/wsbd/auth"
 	"context"
 	"crypto/rsa"
 	"fmt"
@@ -27,7 +28,7 @@ func init() {
 	}
 }
 
-func JWTMiddleware(next http.Handler) http.Handler {
+func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		keys, ok := r.URL.Query()["token"]
 		if !ok || len(keys) < 1 {
@@ -56,8 +57,8 @@ func JWTMiddleware(next http.Handler) http.Handler {
 
 		ctx := context.WithValue(
 			r.Context(),
-			SessionContextKey,
-			Session{Identifier: claims["username"].(string)},
+			auth.SessionContextKey,
+			auth.Session{Identifier: claims["username"].(string)},
 		)
 
 		next.ServeHTTP(w, r.WithContext(ctx))

@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/websocket"
 
 	"chat-example/wsb/wsbd/auth"
+	"chat-example/wsb/wsbd/auth/jwt"
 	"chat-example/wsb/wsbd/channel"
 	"chat-example/wsb/wsbd/client"
 	"chat-example/wsb/wsbd/message"
@@ -38,7 +39,7 @@ func (s *Server) Start() error {
 
 	http.Handle(
 		"/websocket",
-		auth.JWTMiddleware(http.HandlerFunc(s.handleConnections)),
+		jwt.Middleware(http.HandlerFunc(s.handleConnections)),
 	)
 
 	return http.ListenAndServe(":4000", nil)
