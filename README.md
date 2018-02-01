@@ -5,6 +5,11 @@ Example with simple chat
 ![schema](docs/schema.png)
 
 ## Start project:
+* Copy env vars in wsb:
+```
+> $ cp wsb/.env.dist wsb/.env
+```
+
 * Start containers:
 ```
 > $ docker-compose up
