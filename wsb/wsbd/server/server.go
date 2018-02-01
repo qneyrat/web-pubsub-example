@@ -17,9 +17,10 @@ type Server struct {
 	Clients client.Clients
 	Channel *channel.Channel
 	Broker  Broker
+	Port    string
 }
 
-func NewServer(b Broker) *Server {
+func NewServer(port string, b Broker) *Server {
 	c := &channel.Channel{
 		Chan: make(chan message.Message),
 	}
@@ -28,6 +29,7 @@ func NewServer(b Broker) *Server {
 		Clients: make(client.Clients),
 		Channel: c,
 		Broker:  b,
+		Port:    port,
 	}
 
 	return s
@@ -42,7 +44,7 @@ func (s *Server) Start() error {
 		jwt.Middleware(http.HandlerFunc(s.handleConnections)),
 	)
 
-	return http.ListenAndServe(":4000", nil)
+	return http.ListenAndServe(s.Port, nil)
 }
 
 func (s *Server) handleMessages() {

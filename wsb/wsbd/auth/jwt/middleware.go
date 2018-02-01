@@ -11,11 +11,17 @@ import (
 	"os"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/joho/godotenv"
 )
 
 var verifyKey *rsa.PublicKey
 
 func init() {
+	err := godotenv.Load()
+	if err != nil {
+	  log.Fatal("Error loading .env file")
+	}
+
 	pubKeyPath := os.Getenv("JWT_KEY")
 	log.Println(pubKeyPath)
 	verifyBytes, err := ioutil.ReadFile(pubKeyPath)

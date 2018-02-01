@@ -3,7 +3,9 @@ package amqp
 import (
 	"encoding/json"
 	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/streadway/amqp"
 
 	"chat-example/wsb/wsbd/channel"
@@ -16,8 +18,25 @@ type Handler interface {
 
 type Broker struct{}
 
+var AMQPUri string
+var AMQPQueueName string
+var AMQPQueueBinding string
+var AMQPExchange string
+
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+	  log.Fatal("Error loading .env file")
+	}
+
+	AMQPUri = os.Getenv("AMQP_URI")
+	AMQPQueueName = os.Getenv("AMQP_QUEUE_NAME")
+	AMQPQueueBinding = os.Getenv("AMQP_QUEUE_BINDING")
+	AMQPExchange = os.Getenv("AMQP_EXCHANGE")
+}
+
 func (b *Broker) Handle(c *channel.Channel) {
-	conn, err := amqp.Dial("amqp://admin:admin@rabbitmq:5672/")
+	conn, err := amqp.Dial(AMQPUri)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
@@ -29,12 +48,12 @@ func (b *Broker) Handle(c *channel.Channel) {
 	}
 	defer ch.Close()
 
-	q, err := ch.QueueDeclare("messages", true, false, false, false, nil)
+	q, err := ch.QueueDeclare(AMQPQueueName, true, false, false, false, nil)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
-	err = ch.QueueBind(q.Name, "api.conversation.*.message.*.added", "api", false, nil)
+	err = ch.QueueBind(q.Name, AMQPQueueBinding, AMQPExchange, false, nil)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
