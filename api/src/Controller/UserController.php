@@ -29,8 +29,11 @@ class UserController extends Controller
      */
     public function meAction()
     {
-        return JsonResponse::fromJsonString(
-            $this->serializer->serialize($this->getUser(), 'json', ['groups' => ['user']])
+        return new JsonResponse(
+            $this->serializer->serialize($this->getUser(), 'json', ['groups' => ['user']]),
+            200,
+            [],
+            true
         );
     }
 }

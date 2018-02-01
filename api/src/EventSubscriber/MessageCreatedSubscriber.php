@@ -35,6 +35,6 @@ class MessageCreatedSubscriber implements EventSubscriberInterface
 
     public function onMessageCreated(MessageEvent $event)
     {
-        $this->publisher->messageAdded($event->getMessage()->getConversation(), $event->getMessage());
+        $this->publisher->messageAdded($event->getMessage());
     }
 }

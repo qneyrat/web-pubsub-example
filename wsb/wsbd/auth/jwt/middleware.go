@@ -8,15 +8,16 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-const pubKeyPath = "config/jwt/public.pem"
-
 var verifyKey *rsa.PublicKey
 
 func init() {
+	pubKeyPath := os.Getenv("JWT_KEY")
+	log.Println(pubKeyPath)
 	verifyBytes, err := ioutil.ReadFile(pubKeyPath)
 	if err != nil {
 		log.Fatal(err)

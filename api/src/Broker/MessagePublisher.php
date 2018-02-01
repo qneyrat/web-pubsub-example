@@ -24,16 +24,15 @@ class MessagePublisher
         $this->publisher = $publisher;
     }
 
-    public function messageAdded(Conversation $conversation, Message $message)
+    public function messageAdded(Message $message)
     {
+        $conversation = $message->getConversation();
         foreach($conversation->getUsers() as $user) {
             if($message->getFrom() !== $user) {
                 $message->setTo($user->getUsername());
-
-                $payload = json_encode($message->denormalize());
                 $this->publisher->publish(
                     'message',
-                    new BrokerMessage($payload),
+                    new BrokerMessage(json_encode($message->denormalize())),
                     ['routing_key' => sprintf('api.conversation.%s.message.%s.added', $conversation->getId(), $message->getId())]
                 );
             }

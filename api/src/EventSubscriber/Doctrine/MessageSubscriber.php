@@ -7,6 +7,7 @@ use App\Entity\Message;
 use App\Event\MessageEvent;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Events;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class MessageSubscriber implements EventSubscriber
@@ -30,7 +31,7 @@ class MessageSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            'postPersist',
+            Events::postPersist,
         ];
     }
 

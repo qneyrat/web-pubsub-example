@@ -45,8 +45,11 @@ class ConversationController extends Controller
      */
     public function getConversationAction(Conversation $conversation)
     {
-        return JsonResponse::fromJsonString(
-            $this->serializer->serialize($conversation, 'json', ['groups' => ['conversation']])
+        return new JsonResponse(
+            $this->serializer->serialize($conversation, 'json', ['groups' => ['conversation']]),
+            200,
+            [],
+            true
         );
     }
 
