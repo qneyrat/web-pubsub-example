@@ -1,7 +1,6 @@
 package jwt
 
 import (
-	"chat-example/wsb/wsbd/auth"
 	"context"
 	"crypto/rsa"
 	"fmt"
@@ -12,6 +11,8 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/joho/godotenv"
+
+	"web-pubsub-example/wsb/wsbd/auth"
 )
 
 var verifyKey *rsa.PublicKey
@@ -19,7 +20,7 @@ var verifyKey *rsa.PublicKey
 func init() {
 	err := godotenv.Load()
 	if err != nil {
-	  log.Fatal("Error loading .env file")
+		log.Fatal("Error loading .env file")
 	}
 
 	pubKeyPath := os.Getenv("JWT_KEY")

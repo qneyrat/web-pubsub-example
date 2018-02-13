@@ -1,11 +1,12 @@
 package http
 
 import (
-	"chat-example/wsb/wsbd/channel"
-	"chat-example/wsb/wsbd/message"
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"web-pubsub-example/wsb/wsbd/channel"
+	"web-pubsub-example/wsb/wsbd/message"
 )
 
 type Handler interface {

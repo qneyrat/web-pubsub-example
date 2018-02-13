@@ -6,11 +6,11 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"chat-example/wsb/wsbd/auth"
-	"chat-example/wsb/wsbd/auth/jwt"
-	"chat-example/wsb/wsbd/channel"
-	"chat-example/wsb/wsbd/client"
-	"chat-example/wsb/wsbd/message"
+	"web-pubsub-example/wsb/wsbd/auth"
+	"web-pubsub-example/wsb/wsbd/auth/jwt"
+	"web-pubsub-example/wsb/wsbd/channel"
+	"web-pubsub-example/wsb/wsbd/client"
+	"web-pubsub-example/wsb/wsbd/message"
 )
 
 type Server struct {

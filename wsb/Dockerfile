@@ -3,8 +3,8 @@ FROM golang:alpine
 RUN apk add --update \
    git
 
-COPY . /go/src/chat-example/wsb
-WORKDIR /go/src/chat-example/wsb
+COPY . /go/src/web-pubsub-example/wsb
+WORKDIR /go/src/web-pubsub-example/wsb
 
 RUN go get ./
 RUN go build

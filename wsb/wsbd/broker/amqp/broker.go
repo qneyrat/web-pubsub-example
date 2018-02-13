@@ -8,8 +8,8 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/streadway/amqp"
 
-	"chat-example/wsb/wsbd/channel"
-	"chat-example/wsb/wsbd/message"
+	"web-pubsub-example/wsb/wsbd/channel"
+	"web-pubsub-example/wsb/wsbd/message"
 )
 
 type Handler interface {
@@ -26,7 +26,7 @@ var AMQPExchange string
 func init() {
 	err := godotenv.Load()
 	if err != nil {
-	  log.Fatal("Error loading .env file")
+		log.Fatal("Error loading .env file")
 	}
 
 	AMQPUri = os.Getenv("AMQP_URI")

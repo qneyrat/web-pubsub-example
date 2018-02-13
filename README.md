@@ -9,7 +9,11 @@ Example with simple chat
 ```
 > $ cp wsb/.env.dist wsb/.env
 ```
-
+* Setup wsb and client (download vendor files):
+```
+> $ go get -u github.com/golang/dep/cmd/dep # if dep is not already installed
+> $ dep ensure
+```
 * Start containers:
 ```
 > $ docker-compose up

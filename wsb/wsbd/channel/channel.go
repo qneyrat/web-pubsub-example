@@ -1,7 +1,7 @@
 package channel
 
 import (
-	"chat-example/wsb/wsbd/message"
+	"web-pubsub-example/wsb/wsbd/message"
 )
 
 type Channel struct {
